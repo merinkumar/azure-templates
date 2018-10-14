@@ -1,8 +1,59 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {},
-  "variables": {},
-  "resources": [],
-  "outputs": {}
+  "parameters": {
+    "name": {
+      "type": "string",
+      "defaultValue": "template-test-vnet"
+    },
+    "location": {
+      "type": "string"
+    },
+    "addressPrefix": {
+      "type": "string"
+    },
+    "subnetAddressPrefix1": {
+      "type": "string"
+    },
+    "subnetAddressPrefix2": {
+      "type": "string"
+    },
+    "enableDdosProtection": {
+      "type": "bool"
+    }
+  },
+  "variables": {
+    "subnetName": "subnet",
+    "ResourceGroupName": "merinTestRG"
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-08-01",
+      "name": "[parameters('name')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[concat(variables('subnetName'),'1')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetAddressPrefix1')]"
+            }
+          },
+          {
+            "name": "[concat(variables('subnetName'),'2')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetAddressPrefix2')]"
+            }
+          }
+        ],
+        "enableDdosProtection": "[parameters('enableDdosProtection')]"
+      }
+    }
+  ]
 }
